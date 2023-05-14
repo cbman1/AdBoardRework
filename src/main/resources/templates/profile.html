@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+    <div>
+        <div th:object="${userDto}">
+            <p>First Name: <span th:text="${userDto.firstName}"></span></p>
+        </div>
+        <div>
+            <form action="/logout" th:action="@{/logout}">
+                <button type="submit" value="Log Out">Log Out</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
