@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-//    private String userImage;
+public class NewReviewDto {
+    private String text;
+    private Integer score;
+    private String advertName;
 }

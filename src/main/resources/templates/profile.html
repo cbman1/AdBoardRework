@@ -1,20 +1,51 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Profile</title>
 </head>
 <body>
     <div>
+
         <div th:object="${userDto}">
             <p>First Name: <span th:text="${userDto.firstName}"></span></p>
+            <img id="avatarImage" th:src="@{${'/images/uploads/avatar/' + userDto.avatarPath}}" alt=""/>
+            <p th:text="${averageScore}">Score: </p>
         </div>
+
         <div>
-            <form action="/logout" th:action="@{/logout}">
-                <button type="submit" value="Log Out">Log Out</button>
-            </form>
+            <button id="profileButton">Reviews</button>
+            <script th:inline="javascript">
+                let profileButton = document.getElementById('profileButton');
+                const params = new URLSearchParams(document.location.search);
+                const id = params.get('id');
+                profileButton.addEventListener('click', function() {
+                    if (id) {
+                        window.location.href = '/profile/reviews?id=' + id;
+                    } else {
+                        alert('Параметр "id" не найден');
+                    }
+                });
+            </script>
         </div>
+
+        <div sec:authorize="isAuthenticated()">
+            <div th:if="${#authentication.name.equals(userDto.email)}">
+                <form action="/logout" th:action="@{/logout}">
+                    <button type="submit" value="Log Out">Log Out</button>
+                </form>
+                <form method="post" th:action="@{/upload/avatar}" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="file" name="file" class="form-control-file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload File</button>
+                </form>
+            </div>
+        </div>
+
     </div>
+    <script th:src="@{/js/main.js}" defer></script>
 </body>
 </html>

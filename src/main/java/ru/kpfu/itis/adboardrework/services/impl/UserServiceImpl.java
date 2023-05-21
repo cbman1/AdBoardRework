@@ -1,7 +1,6 @@
 package ru.kpfu.itis.adboardrework.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.codec.cli.Digest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,10 +8,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.adboardrework.converters.UserMapper;
-import ru.kpfu.itis.adboardrework.dto.NewUserDto;
-import ru.kpfu.itis.adboardrework.dto.UpdateUserDto;
-import ru.kpfu.itis.adboardrework.dto.UserDto;
+import ru.kpfu.itis.adboardrework.dto.user.NewUserDto;
+import ru.kpfu.itis.adboardrework.dto.user.UpdateUserDto;
+import ru.kpfu.itis.adboardrework.dto.user.UserDto;
+import ru.kpfu.itis.adboardrework.models.Advert;
 import ru.kpfu.itis.adboardrework.models.Authority;
 import ru.kpfu.itis.adboardrework.models.State;
 import ru.kpfu.itis.adboardrework.models.User;
@@ -21,6 +22,7 @@ import ru.kpfu.itis.adboardrework.security.details.UserDetailsImpl;
 import ru.kpfu.itis.adboardrework.services.EmailService;
 import ru.kpfu.itis.adboardrework.services.UserService;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,6 +51,7 @@ public class UserServiceImpl implements UserService {
                 .hashForConfirm(DigestUtils.sha256Hex(newUserDto.getEmail() + UUID.randomUUID()))
                 .state(State.NOT_CONFIRMED)
                 .authority(Authority.ROLE_USER)
+                .avatarPath("default.png")
                 .build());
 
         String confirmationLink = "http://localhost/email/confirm?accept=" +
@@ -58,13 +61,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUser(String email) {
+    public UserDto getUserDtoByEmail(String email) {
         return userMapper.toDto(userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("not found")));
+    }
+
+    @Override
+    public UserDto getUserDtoById(Long id) {
+        return userMapper.toDto(userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("not found")));
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("not found"));
+    }
+
+    @Override
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("not found"));
     }
 
     @Override
     public void updateUser(String email, UpdateUserDto userDto) {
 
+    }
+
+    @Override
+    public List<Advert> favoriteThisUser(Principal principal) {
+        System.out.println(userRepository.findByEmail(principal.getName()));
+        return null;
+    }
+
+    @Override
+    public void setUserAvatar(Principal principal, String avatarPath) {
+        User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new UsernameNotFoundException("not found"));
+        user.setAvatarPath(avatarPath);
+        userRepository.save(user);
     }
 
     @Override

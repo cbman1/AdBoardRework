@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Форма отзыва</title>
+    <style>
+        .star-rating {
+            unicode-bidi: bidi-override;
+            direction: rtl;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            display: inline-block;
+            padding: 5px;
+            font-size: 18px;
+            color: #ccc;
+            cursor: pointer;
+        }
+
+        .star-rating label:before {
+            content: '\2605';
+        }
+
+        .star-rating input:checked ~ label:before {
+            color: #ffcc00;
+        }
+
+        .review-form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .review-form label,
+        .review-form select,
+        .review-form textarea {
+            resize: none;
+        }
+
+        .review-form input[type="submit"] {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .review-form input[type="submit"] {
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="reviews">
+        <p th:each="review : ${reviews}"><span th:text="${review.text}"></span></p>
+    </div>
+
+    <div class="review-form" sec:authorize="isAuthenticated()">
+        <form action="/profile/reviews?id=" th:action="@{/profile/reviews}" id="review-form" method="post" th:object="${newReviewDto}">
+            <script th:inline="javascript">
+                var form = document.getElementById('review-form');
+                const params = new URLSearchParams(document.location.search);
+                const id = params.get('id');
+                form.action = '/profile/reviews?id=' + id;
+            </script>
+
+            <h2>Оставьте отзыв</h2>
+
+            <div class="star-rating">
+                <input type="radio" id="star5" name="rating" value="5" th:field="*{score}">
+                <label for="star5"></label>
+                <input type="radio" id="star4" name="rating" value="4" th:field="*{score}">
+                <label for="star4"></label>
+                <input type="radio" id="star3" name="rating" value="3" th:field="*{score}">
+                <label for="star3"></label>
+                <input type="radio" id="star2" name="rating" value="2" th:field="*{score}">
+                <label for="star2"></label>
+                <input type="radio" id="star1" name="rating" value="1" th:field="*{score}">
+                <label for="star1"></label>
+            </div>
+
+            <label for="review">Отзыв:</label>
+            <textarea id="review" name="review" rows="4" cols="30" th:field="*{text}"></textarea>
+
+            <div class="form-group">
+                <label for="advert">Advert</label>
+                <select required id="advert" name="advert" th:field="*{advertName}">
+                    <option th:each="advert : ${advertsUser}" th:value="${advert.name}" th:text="${advert.name}"></option>
+                </select>
+            </div>
+
+            <div class="form-group form-button">
+                <input type="submit" name="addReview" id="addReview" class="form-submit" value="Add Review"/>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

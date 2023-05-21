@@ -1,0 +1,18 @@
+.carousel {
+    overflow: hidden;
+    position: relative;
+}
+
+.slides {
+    display: flex;
+}
+
+.slide {
+    flex: 0 0 100%;
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.5s ease-in-out;
+}

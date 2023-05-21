@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.kpfu.itis.adboardrework.dto.NewUserDto;
+import ru.kpfu.itis.adboardrework.dto.user.NewUserDto;
 import ru.kpfu.itis.adboardrework.services.UserService;
 
 @Controller

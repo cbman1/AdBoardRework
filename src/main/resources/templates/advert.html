@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Advert</title>
+  <link rel="stylesheet" type="text/css" href="/css/carousel.css">
+</head>
+<body>
+  <div th:object="${advertDto}">
+    <p>Name: <span th:text="${advertDto.name}"></span></p>
+
+    <div sec:authorize="isAuthenticated()" class="addFavorite"  th:if="${!existFavorite}">
+      <button onclick="addFavorite()">Add favourite</button>
+    </div>
+
+    <div sec:authorize="isAuthenticated()" class="removeFavorite" th:if="${existFavorite}">
+      <button onclick="removeFavorite()">Remove favorite</button>
+    </div>
+
+    <div sec:authorize="isAuthenticated()" class="advertSold">
+      <button onclick="sellAdvert()">Sold advert</button>
+    </div>
+
+    <div sec:authorize="isAuthenticated()" class="returnInSell">
+      <button onclick="returnInSell()">Return advert</button>
+    </div>
+
+
+    <div class="carousel">
+      <div class="slides">
+        <div th:each="image : ${advertDto.getImages()}" class="slide" th:style="'background-image: url(/images/uploads/advert/' + ${image} + ')'"></div>
+      </div>
+      <button class="prev-button">Назад</button>
+      <button class="next-button">Вперед</button>
+    </div>
+  </div>
+
+  <script src="/js/carousel.js"></script>
+  <script src="/js/favorite.js"></script>
+  <script src="/js/sell.js"></script>
+</body>
+</html>

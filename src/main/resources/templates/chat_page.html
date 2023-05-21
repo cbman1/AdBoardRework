@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Chats</title>
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.0.13/css/all.css'>
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/chat-style.css">
+    <link rel="shortcut icon"
+          href="https://avatars.mds.yandex.net/get-images-cbir/1780765/YsrctO5AJ50pc5CFxhgIJw546/ocr"
+          type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <div class="ph-container">
+            <div class="ph-float">
+                <a th:href="@{/my-profile}" class='ph-button ph-btn-blue'>Profile</a>
+            </div>
+        </div>
+        <div class="chatbox" id="chat-partial"></div>
+        <div class="messages"></div>
+
+        <ul class="people">
+            <th:block th:if="${chats != null}">
+                <th:block th:each="contact : ${chats}">
+
+                        <th:block th:if="${user.id == contact.senderId}">
+                            <th:block th:with="userId=${contact.recipientId}, userUsername=${contact.recipientUsername}">
+                                <li class="person" th:id="'contact-' + ${userId}">
+                                    <span class="title" th:text="${contact.recipientUsername}"></span>
+                                </li>
+                            </th:block>
+                        </th:block>
+
+                        <th:block th:if="${user.id == contact.recipientId}">
+                            <th:block th:with="userId=${contact.senderId}, userUsername=${contact.senderUsername}">
+                                <li class="person" th:id="'contact-' + ${userId}">
+                                    <span class="title" th:text="${contact.senderUsername}"></span>
+                                </li>
+                            </th:block>
+                        </th:block>
+                </th:block>
+            </th:block>
+        </ul>
+    </div>
+
+    <input id="current-user-id" type="hidden" th:value="${user.id}"/>
+    <input id="current-user-username" type="hidden" th:value="${user.email}"/>
+    <input id="current-user-avatar" type="hidden" th:value="${user.avatarPath}"/>
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <script src="/js/chats.js"></script>
+</body>
+</html>

@@ -9,15 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class LogoutController {
-
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) throws ServletException {
         request.logout();
         return "redirect:/login?logout";
     }
-//    @PostMapping("/logout")
-//    public String logout(HttpServletRequest request) throws ServletException {
-//        request.logout();
-//        return "redirect:/login?logout";
-//    }
 }

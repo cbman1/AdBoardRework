@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Advert</title>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=5a734229-1df7-4d23-9e31-ed174b02ab30
+&lang=ru_RU" type="text/javascript"></script>
+</head>
+<body>
+  <div>
+    <h1>Add Advert</h1>
+      <div>
+          <form enctype="multipart/form-data" action="/advert/add" th:action="@{/advert/add}" class="advert-form" id="advert-form" method="post" th:object="${advertDto}">
+              <div class="form-group">
+                  <label for="name"></label>
+                  <input type="text" name="name" id="name" placeholder="Name Advert" th:field="*{name}"/>
+              </div>
+              <div class="form-group">
+                  <label for="description"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                  <input type="text" name="description" id="description" placeholder="Description advert" th:field="*{description}"/>
+              </div>
+              <div class="form-group">
+                  <label for="price"><i class="zmdi zmdi-email"></i></label>
+                  <input type="text" name="price" id="price" placeholder="Price" th:field="*{price}"/>
+              </div>
+              <div class="form-group">
+                  <label for="category"><i class="zmdi zmdi-lock"></i></label>
+                  <select required id="category" name="category" th:field="*{category}">
+                      <option value="Personal Items">Personal items</option>
+                      <option value="Auto">Auto</option>
+                      <option value="Real Estate">Real estate</option>
+                      <option value="Electronics">Electronics</option>
+                      <option value="Animals">Animals</option>
+                      <option value="Hobby">Hobby</option>
+                      <option value="Business">Business</option>
+                  </select>
+              </div>
+              <div class="form-group">
+                  <label for="photos">Photos:</label>
+                  <input type="file" id="photos" name="photos" multiple/>
+              </div>
+
+              <div class="form-group">
+                  <label for="coordinates">Map: </label>
+                  <div id="map" style="width: 600px; height: 400px"></div>
+                  <input id="coordinates" type="hidden" th:field="*{coordinates}">
+              </div>
+
+
+              <div class="form-group form-button">
+                  <input type="submit" name="addAdvert" id="addAdvert" class="form-submit" value="Add Advert"/>
+              </div>
+          </form>
+      </div>
+  </div>
+  <script th:src="@{/js/map.js}"></script>
+</body>
+</html>

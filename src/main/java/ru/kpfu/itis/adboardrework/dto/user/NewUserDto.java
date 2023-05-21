@@ -1,4 +1,4 @@
-package ru.kpfu.itis.adboardrework.dto;
+package ru.kpfu.itis.adboardrework.dto.user;
 
 
 import jakarta.validation.constraints.Email;

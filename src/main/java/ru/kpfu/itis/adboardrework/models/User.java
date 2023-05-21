@@ -1,11 +1,10 @@
 package ru.kpfu.itis.adboardrework.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.transaction.Transactional;
+import lombok.*;
 
 import java.util.*;
 
@@ -15,6 +14,7 @@ import java.util.*;
 @NoArgsConstructor
 @Builder
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,13 +43,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "favorites",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "advert_id"))
+    @JsonIgnore
+    @ToString.Exclude
     private List<Advert> favorites = new ArrayList<>();
-
-//    private UUID avatar;
+    private String avatarPath;
 }
 
 
