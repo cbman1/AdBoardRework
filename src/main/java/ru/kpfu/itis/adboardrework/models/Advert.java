@@ -2,6 +2,7 @@ package ru.kpfu.itis.adboardrework.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +20,7 @@ import java.util.Objects;
 @Data
 @Builder
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Advert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +36,7 @@ public class Advert {
     private String salesStartDate;
     private String dateOfSale;
     @ElementCollection(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<String> images = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     private State state;
@@ -41,8 +44,9 @@ public class Advert {
     @JoinTable (name="favorites",
             joinColumns=@JoinColumn (name="advert_id"),
             inverseJoinColumns=@JoinColumn(name="user_id"))
-    @JsonIgnore
+
     @ToString.Exclude
+    @JsonIgnore
     private List<User> users = new ArrayList<>();
 
     @Override

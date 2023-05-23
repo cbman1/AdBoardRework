@@ -14,8 +14,26 @@ configurations {
     }
 }
 
+
+apply plugin: 'java'
+
+// Настройка плагина Java
+jar {
+    manifest {
+        attributes 'Main-Class': 'ru.kpfu.itis.adboardrework.AdBoardReworkApplication'
+        baseName 'app'
+    }
+    from sourceSets.main.output
+}
+
 repositories {
     mavenCentral()
+}
+
+bootJar {
+    from(sourceSets.main.resources) {
+        include '*'
+    }
 }
 
 dependencies {
@@ -40,6 +58,12 @@ dependencies {
     implementation 'org.webjars:sockjs-client:1.5.1'
     implementation 'org.webjars:stomp-websocket:2.3.3'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-devtools'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+
+
+
+
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
@@ -47,6 +71,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor "org.mapstruct:mapstruct-processor:1.5.3.Final"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 }
 
 

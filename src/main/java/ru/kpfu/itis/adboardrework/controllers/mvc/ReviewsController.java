@@ -12,6 +12,7 @@ import ru.kpfu.itis.adboardrework.dto.NewReviewDto;
 import ru.kpfu.itis.adboardrework.dto.advert.AdvertDto;
 import ru.kpfu.itis.adboardrework.services.AdvertService;
 import ru.kpfu.itis.adboardrework.services.ReviewsService;
+import ru.kpfu.itis.adboardrework.services.UserService;
 
 import java.security.Principal;
 
@@ -20,8 +21,11 @@ import java.security.Principal;
 public class ReviewsController {
     private final AdvertService advertService;
     private final ReviewsService reviewsService;
+    private final UserService userService;
     @GetMapping("/profile/reviews")
     public String reviews(@RequestParam("id") Long id, Model model, Principal principal) {
+        model.addAttribute("emailReviews", userService.getUserById(id).getEmail());
+
         model.addAttribute("advertsUser", advertService.getAllAdvertsDtoByUser(id));
         model.addAttribute("reviews", reviewsService.getReviewsUser(id));
         model.addAttribute("newReviewDto", new NewReviewDto());

@@ -1,6 +1,7 @@
 package ru.kpfu.itis.adboardrework.controllers.mvc;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,22 +46,19 @@ public class AdvertController {
     }
 
     @PostMapping("/advert/add")
-    public String addAdvert(@ModelAttribute(value = "advertDto") AdvertDto advertDto, Principal principal, @RequestParam("photos") MultipartFile[] photos) throws IOException {
-        for (MultipartFile photo : photos) {
+    public String addAdvert(@Valid @ModelAttribute(value = "advertDto") AdvertDto advertDto, Principal principal, @RequestParam("photos") MultipartFile[] photos) throws IOException {
+            for (MultipartFile photo : photos) {
+                if (!Objects.equals(photo.getOriginalFilename(), "")) {
+                    String extension = Objects.requireNonNull(photo.getOriginalFilename()).substring(photo.getOriginalFilename().lastIndexOf("."));
+                    String fileName = StringUtils.cleanPath(UUID.randomUUID() + extension);
+                    Path path = Paths.get(PATH_UPLOAD_ADVERT_IMAGES + fileName);
+                    Files.copy(photo.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
-            String extension = Objects.requireNonNull(photo.getOriginalFilename()).substring(photo.getOriginalFilename().lastIndexOf("."));
-            String fileName = StringUtils.cleanPath(UUID.randomUUID() + extension);
-            Path path = Paths.get(PATH_UPLOAD_ADVERT_IMAGES + fileName);
-            Files.copy(photo.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                    advertDto.getImages().add(fileName);
+                }
+            }
 
-            advertDto.getImages().add(fileName);
-        }
         advertService.addAdvert(advertDto, principal);
         return "redirect:/advert?id=" + advertService.getIdLastAdvert(principal);
-    }
-
-    @GetMapping("/map")
-    public String mapView() {
-        return "map";
     }
 }

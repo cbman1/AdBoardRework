@@ -1,6 +1,7 @@
 package ru.kpfu.itis.adboardrework.services;
 
 import ru.kpfu.itis.adboardrework.dto.advert.AdvertDto;
+import ru.kpfu.itis.adboardrework.models.Advert;
 import ru.kpfu.itis.adboardrework.models.User;
 
 import java.security.Principal;
@@ -17,4 +18,7 @@ public interface AdvertService {
 
     void returnInSell(Long id, Principal principal);
     List<AdvertDto> getAllAdvertsDtoByUser(Long idUser);
+    List<Advert> getAllActiveAdverts();
+    List<Advert> getAllActiveAdvertsByUser(Long idUser);
+    List<Advert> getAllSoldAdvertsByUser(Long idUser);
 }

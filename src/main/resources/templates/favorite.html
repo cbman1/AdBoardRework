@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>My favorites</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card:nth-child(5n) {
+            margin-right: 0;
+        }
+    </style>
+    <link href="/css/header.css" rel="stylesheet">
+</head>
+<body>
+    <header class="p-3 bg-dark text-white">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a th:href="@{/}" class="nav-link px-2 text-white">Home</a></li>
+                    <li><a th:href="@{/my-favorite}" class="nav-link px-2 text-white">Favorites</a></li>
+                    <li><a th:href="@{/chats}" class="nav-link px-2 text-white">Messages</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="nav-link px-2 text-white">About</a></li>
+                </ul>
+
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                    <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+                </form>
+
+                <div class="text-end" sec:authorize="!isAuthenticated()">
+                    <button type="button" class="btn btn-outline-light me-2" th:onclick="|window.location.href='/login'|">Login</button>
+                    <button type="button" class="btn btn-warning" th:onclick="|window.location.href='/register'|">Sign-up</button>
+                </div>
+
+                <div class="text-end" sec:authorize="isAuthenticated()">
+                    <button type="button" class="btn btn-outline-light me-2" th:onclick="|window.location.href='/profile'|">Profile</button>
+                    <button type="button" class="btn btn-warning" th:onclick="|window.location.href='/advert/add'|">Add advert</button>
+                    <button type="button" class="btn btn-outline-light me-2" th:onclick="|window.location.href='/logout'|">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="cards" id="cards">
+        <div class="card" style="width: 18rem;" th:each="advert : ${favorites}" id="card">
+            <th:block th:if="${advert.getImages().size() > 0}">
+                <img th:src="@{${'/images/uploads/advert/' + advert.getImages().get(0)}}" class="card-img" alt="...">
+            </th:block>
+            <th:block th:if="${advert.getImages().size() == 0}">
+                <img th:src="@{'/images/uploads/advert/default.png'}" class="card-img" alt="...">
+            </th:block>
+
+            <div class="card-body">
+                <input type="hidden" id="idAdvert" th:value="${advert.id}">
+                <h4 class="card-title" th:text="*{advert.name}"></h4>
+                <p class="card-text" th:text="*{advert.description}"></p>
+                <h5 class="card-price" th:text="'Price: ' +  *{advert.price}"></h5>
+                <a th:href="@{/advert(id=${advert.id})}" class="btn btn-primary">Open</a>
+                <button class="btn btn-danger" onclick="removeFavorite()">Remove</button>
+            </div>
+            <!--                <button class="btn-danger btn" onclick="removeFavorite(1)">Remove</button>-->
+<!--                <a th:href="@{/advert/remove/favorite(id=${advert.id})}" class="btn btn-danger">Remove</a>-->
+
+            </div>
+        </div>
+    </div>
+    <script src="/js/favorite.js"></script>
+</body>
+</html>

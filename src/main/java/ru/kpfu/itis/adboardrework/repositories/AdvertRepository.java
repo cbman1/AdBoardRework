@@ -18,6 +18,6 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     List<Advert> findAllByAuthorId(User user);
 
     Optional<Advert> findByNameAndAuthorId(String name, User user);
-
+    List<Advert> findAllByState(State state);
     List<Advert> findAllByAuthorIdAndState(User user, State state);
 }

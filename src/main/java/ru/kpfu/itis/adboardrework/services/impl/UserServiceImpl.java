@@ -22,6 +22,7 @@ import ru.kpfu.itis.adboardrework.security.details.UserDetailsImpl;
 import ru.kpfu.itis.adboardrework.services.EmailService;
 import ru.kpfu.itis.adboardrework.services.UserService;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
@@ -56,8 +57,11 @@ public class UserServiceImpl implements UserService {
 
         String confirmationLink = "http://localhost/email/confirm?accept=" +
                 newUser.getHashForConfirm();
+        try {
+            emailService.sendEmail(newUserDto.getEmail(), "confirm", confirmationLink);
+        } catch (IOException ignored) {
 
-        emailService.sendEmail(newUserDto.getEmail(), "confirm", confirmationLink);
+        }
     }
 
     @Override
@@ -87,8 +91,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Advert> favoriteThisUser(Principal principal) {
-        System.out.println(userRepository.findByEmail(principal.getName()));
-        return null;
+        return getUserByEmail(principal.getName()).getFavorites();
     }
 
     @Override

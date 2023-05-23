@@ -1,8 +1,8 @@
 <div id="other-user-id" class="d-none" th:text="${otherUser.id}"></div>
 <div id="other-user-avatar" class="d-none" th:text="av"></div>
 <div class="top-bar">
-    <div class="avatar"><p th:text="${otherUser.avatarPath}"></p></div>
-    <div class="name" th:text="${otherUser.email}"></div>
+    <div class="avatar"><p th:text="${otherUser.firstName.substring(0,1) + otherUser.lastName.substring(0,1)}"></p></div>
+    <div class="name" th:text="${otherUser.firstName + ' ' + otherUser.lastName}"></div>
     <div class="menu">
         <div class="dots"></div>
     </div>

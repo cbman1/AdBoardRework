@@ -21,6 +21,7 @@ public class AdBoardReworkApplication {
     ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
+
     public static void main(String[] args) {
         SpringApplication.run(AdBoardReworkApplication.class, args);
     }

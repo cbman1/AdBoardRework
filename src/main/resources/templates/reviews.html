@@ -69,7 +69,7 @@
         <p th:each="review : ${reviews}"><span th:text="${review.text}"></span></p>
     </div>
 
-    <div class="review-form" sec:authorize="isAuthenticated()">
+    <div class="review-form" sec:authorize="isAuthenticated()" th:if="${#authentication.name != emailReviews}">
         <form action="/profile/reviews?id=" th:action="@{/profile/reviews}" id="review-form" method="post" th:object="${newReviewDto}">
             <script th:inline="javascript">
                 var form = document.getElementById('review-form');

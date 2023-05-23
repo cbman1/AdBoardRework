@@ -32,7 +32,7 @@ public class UploadController {
     public String uploadImage(Principal principal, Model model, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
         if (file.isEmpty()) {
             redirectAttributes.addFlashAttribute("message", "Please select a file to upload.");
-            return "redirect:/my-profile";
+            return "redirect:/profile";
         }
 
         // normalize the file path
@@ -52,6 +52,6 @@ public class UploadController {
 
         redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + fileName + '!');
 
-        return "redirect:/my-profile";
+        return "redirect:/profile";
     }
 }

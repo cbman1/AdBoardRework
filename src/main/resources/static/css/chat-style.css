@@ -6,11 +6,10 @@ html {
 
 body {
     display: grid;
-    background: linear-gradient(to bottom left, #008cf0 40%, #f9fbff 100%);
     font-family: "Lato", sans-serif;
 }
 
-.container {
+.container-chat {
     position: relative;
     margin: 12% auto;
     width: 620px;

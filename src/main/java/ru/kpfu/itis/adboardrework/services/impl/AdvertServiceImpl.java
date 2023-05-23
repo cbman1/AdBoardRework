@@ -126,12 +126,31 @@ public class AdvertServiceImpl implements AdvertService {
 
     }
 
+    @Override
+    public List<AdvertDto> getAllAdvertsDtoByUser(Long id) {
+        return advertMapper.toDtoList(advertRepository.findAllByAuthorId(userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("not found"))));
+    }
+
+    @Override
+    public List<Advert> getAllActiveAdverts() {
+        return advertRepository.findAllByState(State.ACTIVE);
+    }
+
+    @Override
+    public List<Advert> getAllActiveAdvertsByUser(Long idUser) {
+        return advertRepository.findAllByAuthorIdAndState(getUserOrThrow(idUser), State.ACTIVE);
+    }
+
+    @Override
+    public List<Advert> getAllSoldAdvertsByUser(Long idUser) {
+        return advertRepository.findAllByAuthorIdAndState(getUserOrThrow(idUser), State.SOLD);
+    }
+
     private Advert getAdvertOrThrow(Long id) {
         return advertRepository.findById(id).orElseThrow(() -> new NotFoundException("not found"));
     }
 
-    @Override
-    public List<AdvertDto> getAllAdvertsDtoByUser(Long id) {
-        return advertMapper.toDtoList(advertRepository.findAllByAuthorId(userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("not found"))));
+    private User getUserOrThrow(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("not found"));
     }
 }

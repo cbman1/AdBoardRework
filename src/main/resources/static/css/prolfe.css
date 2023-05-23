@@ -1,0 +1,153 @@
+.page {
+    margin-left: 55px;
+    margin-top: 55px;
+    margin-right: 55px;
+    margin-bottom: 55px;
+    display: flex;
+    flex-direction: column; }
+
+.topPart {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 55px; }
+
+.profileCard {
+    display: flex;
+    flex-direction: row;
+    gap: 27px;
+    width: 415px;
+    height: 199px;
+    border: 1px solid #C5C5C5;
+    border-radius: 10px;
+    padding: 23px; }
+
+.leftPart {
+    display: flex;
+    flex-direction: column;
+    gap: 13px; }
+
+.avatar {
+    width: 109px; }
+
+.greyButton {
+    width: 109px;
+    height: 31px;
+    color: #888888;
+    border: 1px solid #E8E8E8;
+    border-radius: 5px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px; }
+
+.greyButton:hover {
+    background: #E8E8E8; }
+
+.name {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: black;
+    margin-bottom: 10px; }
+
+.ratingGroup {
+    background: #E8E8E8;
+    border-radius: 5px;
+    padding-top: 8px;
+    padding-left: 12px;
+    padding-bottom: 8px;
+    width: 233px;
+    height: 48px;
+    margin-bottom: 14px; }
+
+.ratingText {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #888888;
+    margin-bottom: 5px; }
+
+.ratingValue {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: black; }
+
+.profileButtons {
+    display: flex;
+    flex-direction: row;
+    gap: 15px; }
+
+.profileButton {
+    width: 109px;
+    height: 32px;
+    border-radius: 5px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px; }
+
+.lightButton {
+    background: white;
+    color: #0B6DFF;
+    border: 1px solid #0C6EF6; }
+
+.blueButton {
+    background: #0B6DFF;
+    color: white; }
+
+.advertsControl {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 15%;
+    margin-right: auto;
+    gap: 23px; }
+
+.advertsHeader {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 36px;
+    color: black; }
+
+.controlButtons {
+    display: flex;
+    flex-direction: row;
+    gap: 40px; }
+
+.controlButton {
+    width: 160px;
+    height: 50px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+    color: #0B6EF8;
+    border: 2px solid #0C6EF6;
+    border-radius: 5px; }
+
+.controlButton:hover {
+    background: #0B6DFF;
+    color: white; }
+
+.controlButton.active {
+    background: #0B6DFF;
+    color: white; }
+
+.productCards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: -5%;
+}
