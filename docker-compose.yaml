@@ -3,7 +3,7 @@ version: '3.3'
 services:
   database:
     image:
-      postgres
+      postgres:15.3
     container_name: database
     ports:
       - 5431:5432
@@ -13,10 +13,9 @@ services:
       - POSTGRES_DB=adboard_db
     volumes:
       - postgres_volume:/var/lib/postgresql/data
-      -
   application:
     image:
-      application-image
+      ilya-app
     container_name: application_1
     networks:
       - cloud
@@ -32,8 +31,8 @@ services:
 
 volumes:
   postgres_volume:
-    external: true
+    external: false
 
 networks:
   cloud:
-    external: true
+    external: false

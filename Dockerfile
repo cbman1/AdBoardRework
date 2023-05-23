@@ -1,37 +1,12 @@
 # syntax=docker/dockerfile:experimental
 
-#FROM gradle AS temp_build_image
-#COPY src /home/application/src
-#COPY build.gradle /home/application
-#COPY settings.gradle /home/application
-#COPY gradle /home/application/gradle
-#USER root
-#COPY --chown=gradle:gradle . /home/application/gradle/src
-#RUN gradle build || return 0
-#COPY . .
-#RUN gradle clean build
-#
-#FROM openjdk:19-alpine
-#ENV ARTIFACT_NAME=app-0.0.1-SNAPSHOT-plain.jar
-#ENV APP_HOME=/usr/app/
-#
-#COPY /build/libs/app-0.0.1-SNAPSHOT-plain.jar /usr/local/lib/app-0.0.1-SNAPSHOT-plain.jar
-#EXPOSE 8080
-#ENTRYPOINT ["java", "-jar", "/usr/local/lib/app-0.0.1-SNAPSHOT-plain.jar"]
+FROM maven AS build
+COPY src /home/src
+COPY pom.xml /home
+USER root
+RUN --mount=type=cache,target=/root/.m2 mvn -DskipTests -f /home/pom.xml clean package
 
-#Build stage
-
-FROM gradle:latest AS BUILD
-WORKDIR /IdeaProjects/AdBoardRework/
-COPY . .
-RUN gradle build
-
-# Package stage
-
-FROM openjdk:latest
-ENV JAR_NAME=app-0.0.1-SNAPSHOT-plain.jar
-ENV APP_HOME=/IdeaProjects/AdBoardRework/
-WORKDIR $APP_HOME
-COPY --from=BUILD $APP_HOME .
+FROM ibm-semeru-runtimes:open-19.0.2_7-jre-jammy
+COPY --from=build /home/target/MyTube-2.0.jar /service/MyTube-2.0.jar
 EXPOSE 8080
-ENTRYPOINT exec java -jar $APP_HOME/build/libs/$JAR_NAME
+ENTRYPOINT ["java", "-jar", "/service/MyTube-2.0.jar"]
