@@ -24,7 +24,7 @@ public class RegisterController {
     public String showRegistration(Model model) {
         model.addAttribute("newUserDto", new NewUserDto());
         model.addAttribute("errors", null);
-        return "/register";
+        return "register";
     }
     @PostMapping
     public String register(@Valid @ModelAttribute("newUserDto") NewUserDto newUserDto, BindingResult bindingResult, Model model) {
