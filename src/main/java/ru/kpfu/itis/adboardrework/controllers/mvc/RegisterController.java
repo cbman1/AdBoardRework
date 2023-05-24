@@ -23,10 +23,17 @@ public class RegisterController {
     @GetMapping
     public String showRegistration(Model model) {
         model.addAttribute("newUserDto", new NewUserDto());
+        model.addAttribute("errors", null);
         return "/register";
     }
     @PostMapping
-    public String register(@Valid @ModelAttribute("newUserDto") NewUserDto newUserDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String register(@Valid @ModelAttribute("newUserDto") NewUserDto newUserDto, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
+            return "register";
+        }
+
         userService.register(newUserDto);
         return "redirect:/login";
     }

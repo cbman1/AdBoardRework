@@ -9,12 +9,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.kpfu.itis.adboardrework.models.Chat;
 import ru.kpfu.itis.adboardrework.models.Message;
+import ru.kpfu.itis.adboardrework.models.User;
 import ru.kpfu.itis.adboardrework.services.ChatService;
 import ru.kpfu.itis.adboardrework.services.UserService;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/chats")
@@ -26,7 +29,13 @@ public class ChatsController {
 
     @GetMapping
     public String getChatsPage(Principal principal, Model model) {
-        var user = userService.getUserByEmail(principal.getName());
+
+        if (principal == null) {
+            model.addAttribute("errorMessage", "You must be logged in");
+            return "error";
+        }
+
+        User user = userService.getUserByEmail(principal.getName());
         model.addAttribute("user", user);
         model.addAttribute("chats", chatService.getAllChatsByUserId(user.getId()));
         return "chat_page";
@@ -34,7 +43,7 @@ public class ChatsController {
 
     @MessageMapping("/chat")
     public void processMessage(@Payload Message message) {
-        var chat = chatService.getOrCreateChatByUsersIds(message.getSenderId(),
+        Chat chat = chatService.getOrCreateChatByUsersIds(message.getSenderId(),
                 message.getRecipientId(),
                 true);
         message.setChat(chat);
@@ -59,8 +68,13 @@ public class ChatsController {
                                  @PathVariable("sender-id") Long senderId,
                                  @PathVariable("recipient-id") Long recipientId,
                                  Model model) {
-        var messages = chatService.findMessages(senderId, recipientId);
-        var otherUserId = senderId.equals(userService.getUserByEmail(principal.getName()).getId()) ? recipientId : senderId;
+        if (principal == null) {
+            model.addAttribute("errorMessage", "You must be logged in");
+            return "error";
+        }
+
+        List<Message> messages = chatService.findMessages(senderId, recipientId);
+        Long otherUserId = senderId.equals(userService.getUserByEmail(principal.getName()).getId()) ? recipientId : senderId;
         model.addAttribute("currentUser", userService.getUserByEmail(principal.getName()));
         model.addAttribute("otherUserId", otherUserId);
         model.addAttribute("otherUser", userService.getUserById(otherUserId));
@@ -71,7 +85,11 @@ public class ChatsController {
     @GetMapping("/get/chat/{username}")
     public String getChat(Principal principal,
                           @PathVariable("username") String username, Model model) {
-        var user = userService.getUserByEmail(username);
+        if (principal == null) {
+            model.addAttribute("errorMessage", "You must be logged in");
+            return "error";
+        }
+        User user = userService.getUserByEmail(username);
         Long userId;
         if (user != null) {
             userId = user.getId();
@@ -92,11 +110,13 @@ public class ChatsController {
     public String getNewChat(Principal principal,
                              @PathVariable Long id,
                              Model model) {
-        var chat = chatService.getOrCreateChatByUsersIds(userService.getUserByEmail(principal.getName()).getId(), id, true);
-        var user = userService.getUserByEmail(principal.getName());
+        if (principal == null) {
+            model.addAttribute("errorMessage", "You must be logged in");
+            return "error";
+        }
+        Chat chat = chatService.getOrCreateChatByUsersIds(userService.getUserByEmail(principal.getName()).getId(), id, true);
+        User user = userService.getUserByEmail(principal.getName());
         model.addAttribute("user", user);
-//        var profile = user.();
-//        model.addAttribute("profile", profile != null ? profile : new Profile());
         model.addAttribute("chats", chatService.getAllChatsByUserId(user.getId()));
         return "redirect:/chats";
     }

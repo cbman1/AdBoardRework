@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import ru.kpfu.itis.adboardrework.converters.AdvertMapper;
 import ru.kpfu.itis.adboardrework.dto.advert.AdvertDto;
+import ru.kpfu.itis.adboardrework.dto.advert.UpdateAdvertDto;
 import ru.kpfu.itis.adboardrework.models.Advert;
 import ru.kpfu.itis.adboardrework.models.State;
 import ru.kpfu.itis.adboardrework.models.User;
@@ -47,8 +48,13 @@ public class AdvertServiceImpl implements AdvertService {
     }
 
     @Override
-    public AdvertDto getAdvert(Long id) {
+    public AdvertDto getAdvertDtoById(Long id) {
         return advertMapper.toDto(getAdvertOrThrow(id));
+    }
+
+    @Override
+    public Advert getAdvertById(Long id) {
+        return getAdvertOrThrow(id);
     }
 
     @Override
@@ -152,5 +158,25 @@ public class AdvertServiceImpl implements AdvertService {
 
     private User getUserOrThrow(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("not found"));
+    }
+
+    @Override
+    public void updateAdvert(Long id, UpdateAdvertDto updateAdvertDto) {
+        Advert advert = getAdvertById(id);
+
+        if (!updateAdvertDto.getName().equals("")) {
+            advert.setName(updateAdvertDto.getName());
+        }
+        if (!updateAdvertDto.getDescription().equals("")) {
+            advert.setDescription(updateAdvertDto.getDescription());
+        }
+        if (updateAdvertDto.getPrice() != null) {
+            advert.setPrice(updateAdvertDto.getPrice());
+        }
+        if (!updateAdvertDto.getImages().isEmpty()) {
+            advert.setImages(updateAdvertDto.getImages());
+        }
+
+        advertRepository.save(advert);
     }
 }

@@ -1,4 +1,22 @@
 package ru.kpfu.itis.adboardrework.dto.user;
 
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UpdateUserDto {
+
+    @Length(max = 50, message = "Max length is 50")
+    private String firstName;
+    @Length(max = 50, message = "Max length is 50 is")
+    private String lastName;
+    private String avatarPath;
 }

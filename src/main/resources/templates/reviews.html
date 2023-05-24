@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Форма отзыва</title>
+    <title>Reviews</title>
     <style>
         .star-rating {
             unicode-bidi: bidi-override;
@@ -63,10 +63,59 @@
             cursor: pointer;
         }
     </style>
+    <link href="/css/header.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+
+<header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a th:href="@{/}" class="nav-link px-2 text-white">Home</a></li>
+                <li><a th:href="@{/my-favorite}" class="nav-link px-2 text-white">Favorites</a></li>
+                <li><a th:href="@{/chats}" class="nav-link px-2 text-white">Messages</a></li>
+                <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="nav-link px-2 text-white">About</a></li>
+            </ul>
+
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+            </form>
+
+            <div class="text-end" sec:authorize="!isAuthenticated()">
+                <button type="button" class="btn btn-outline-light me-2" th:onclick="|window.location.href='/login'|">Login</button>
+                <button type="button" class="btn btn-warning" th:onclick="|window.location.href='/register'|">Sign-up</button>
+            </div>
+
+            <div class="text-end" sec:authorize="isAuthenticated()">
+                <button type="button" class="btn btn-outline-light me-2" th:onclick="|window.location.href='/profile'|">Profile</button>
+                <button type="button" class="btn btn-warning" th:onclick="|window.location.href='/advert/add'|">Add advert</button>
+                <button type="button" class="btn btn-outline-light me-2" th:onclick="|window.location.href='/logout'|">Logout</button>
+            </div>
+        </div>
+    </div>
+</header>
+
     <div class="reviews">
-        <p th:each="review : ${reviews}"><span th:text="${review.text}"></span></p>
+        <div class="review" th:if="${!reviews.isEmpty()}" th:each="review : ${reviews}">
+            <a th:href="@{/profile(id=${review.authorId.id})}">
+                Author: <span th:text="${review.authorId.firstName + ' ' + review.authorId.lastName}"></span>
+            </a>
+            <a th:href="@{/advert(id=${review.advertId.id})}">
+                Advert: <span th:text="${review.advertId.name}"></span>
+            </a>
+            <p></p>
+            <p>Text: <span th:text="${review.text}"></span></p>
+            <p>Score: <span th:text="${review.score}"></span></p>
+            <p>-------------------------------------------------</p>
+        </div>
+    </div>
+    <div class="no-review" th:if="${reviews.isEmpty()}">
+        <span>No reviews yet</span>
     </div>
 
     <div class="review-form" sec:authorize="isAuthenticated()" th:if="${#authentication.name != emailReviews}">

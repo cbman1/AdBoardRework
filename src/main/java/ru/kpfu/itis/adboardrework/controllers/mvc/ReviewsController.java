@@ -33,7 +33,11 @@ public class ReviewsController {
     }
 
     @PostMapping("/profile/reviews")
-    public String addReview(@ModelAttribute(value = "newReviewDto") NewReviewDto reviewDto, @RequestParam("id") Long id, Principal principal) {
+    public String addReview(@ModelAttribute(value = "newReviewDto") NewReviewDto reviewDto, @RequestParam("id") Long id, Principal principal, Model model) {
+        if (principal == null) {
+            model.addAttribute("errorMessage", "You must be logged in");
+            return "error";
+        }
         reviewsService.addReview(reviewDto, id, principal);
         return "redirect:/profile/reviews?id=" + id;
     }

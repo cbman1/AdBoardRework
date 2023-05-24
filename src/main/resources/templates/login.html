@@ -34,6 +34,11 @@
                             <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
                             <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
                         </div>
+
+                        <div th:if="${errorMessage}">
+                            <span th:text="${errorMessage}"></span>
+                        </div>
+
                     </form>
 
                     <div class="social-login">

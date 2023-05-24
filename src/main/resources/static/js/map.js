@@ -35,8 +35,5 @@ function init(){
         var address = result.geoObjects.get(0).properties.get('text');
         document.getElementById('address').innerText = address;
 
-        // Выведем в консоль результат геокодирования.
-        console.log(result.geoObjects.get(0).properties.get('metaDataProperty'));
-
     });
 }

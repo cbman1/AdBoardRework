@@ -10,9 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
 import ru.kpfu.itis.adboardrework.dto.advert.AdvertDto;
@@ -73,7 +71,7 @@ public class AdvertRestController {
     })
     @GetMapping("/api/advert/{id}")
     public ResponseEntity<AdvertDto> getAdvertById(@Parameter(name ="получение объявления по идентификатору", example = "1") @PathVariable Long id) {
-        return ResponseEntity.ok(advertService.getAdvert(id));
+        return ResponseEntity.ok(advertService.getAdvertDtoById(id));
     }
 
 

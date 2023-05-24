@@ -1,15 +1,16 @@
 package ru.kpfu.itis.adboardrework.services;
 
 import ru.kpfu.itis.adboardrework.dto.advert.AdvertDto;
+import ru.kpfu.itis.adboardrework.dto.advert.UpdateAdvertDto;
 import ru.kpfu.itis.adboardrework.models.Advert;
-import ru.kpfu.itis.adboardrework.models.User;
 
 import java.security.Principal;
 import java.util.List;
 
 public interface AdvertService {
     void addAdvert(AdvertDto advertDto, Principal principal);
-    AdvertDto getAdvert(Long id);
+    AdvertDto getAdvertDtoById(Long id);
+    Advert getAdvertById(Long id);
     Long getIdLastAdvert(Principal principal);
     boolean checkFavoriteUser(Principal principal, Long idAdvert);
     void addAdvertFavorite(Long id, Principal principal);
@@ -21,4 +22,5 @@ public interface AdvertService {
     List<Advert> getAllActiveAdverts();
     List<Advert> getAllActiveAdvertsByUser(Long idUser);
     List<Advert> getAllSoldAdvertsByUser(Long idUser);
+    void updateAdvert(Long id, UpdateAdvertDto updateAdvertDto);
 }

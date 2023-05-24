@@ -71,26 +71,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .ignoringRequestMatchers("/profile/**")
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers("/register", "/login", "/email/confirm/**",
+        return httpSecurity
+                .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .ignoringRequestMatchers("/profile/**"))
+                .authorizeHttpRequests(request ->
+                        request.requestMatchers("/register", "/login", "/email/confirm/**",
                         "/profile", "/advert", "/", "/home", "/map", "/profile/reviews",
-                        "/my-favorite", "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/api/**").permitAll()
-                .requestMatchers("/logout", "/upload/**", "/advert/**", "/chats/**").authenticated()
-                .and()
-//                .oauth2Login(oauth2Login ->
-//                        oauth2Login.loginPage("/login").defaultSuccessUrl("/my-profile")
-//                                .userInfoEndpoint()
-//                                .userService(oauth2UserService())
-//                )
+                        "/my-favorite", "/swagger-ui.html", "/swagger-ui/**", "/v3/**", "/api/**", "/error").permitAll()
+                                .requestMatchers("/logout", "/upload/**", "/advert/**", "/chats/**", "/profile/edit").authenticated()
+                ).oauth2Login(oauth2Login -> oauth2Login.loginPage("/login").defaultSuccessUrl("/profile").userInfoEndpoint(userService -> userService.userService(oauth2UserService())))
                 .formLogin(login -> login.loginPage("/login").defaultSuccessUrl("/"))
-                .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/"));
-//                .headers(headers -> headers.xssProtection().and().contentSecurityPolicy("script-src 'self' https://api-maps.yandex.ru 'sha256-base64 encoded hash'");
-
-        return httpSecurity.build();
+                .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/"))
+                .build();
     }
     @Autowired
     public void bindUserDetailsServiceAndPasswordEncoder(AuthenticationManagerBuilder builder) throws Exception {

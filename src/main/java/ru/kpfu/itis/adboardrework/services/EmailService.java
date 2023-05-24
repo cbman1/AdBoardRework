@@ -1,6 +1,5 @@
 package ru.kpfu.itis.adboardrework.services;
 
-import jakarta.mail.MessagingException;
 
 import java.io.IOException;
 import java.util.Map;

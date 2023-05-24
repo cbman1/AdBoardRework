@@ -85,8 +85,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(String email, UpdateUserDto userDto) {
+    public void updateUser(String email, UpdateUserDto updateUserDto) {
+        User user = getUserByEmail(email);
 
+        if (!updateUserDto.getFirstName().equals("")) {
+            user.setFirstName(updateUserDto.getFirstName());
+        }
+
+        if (!updateUserDto.getLastName().equals("")) {
+            user.setLastName(updateUserDto.getLastName());
+        }
+
+        if (!updateUserDto.getAvatarPath().equals("")) {
+            user.setAvatarPath(updateUserDto.getAvatarPath());
+        }
+
+        userRepository.save(user);
     }
 
     @Override

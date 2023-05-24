@@ -17,13 +17,10 @@ function addFavorite() {
     }
 }
 
-function removeFavorite() {
+function removeFavorite(idAdvert) {
     var xhr = new XMLHttpRequest();
-    var idAdvert = document.getElementById('idAdvert').value;
-    console.log(idAdvert);
     const params = new URLSearchParams(document.location.search);
     const id = params.get('id');
-    console.log(id)
     if (id) {
         xhr.open('GET', '/advert/remove/favorite?id=' + id, true);
         xhr.onreadystatechange = function() {
@@ -37,12 +34,11 @@ function removeFavorite() {
         };
         xhr.send();
     } else {
-        console.log(idAdvert);
         xhr.open('GET', '/advert/remove/favorite?id=' + idAdvert, true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 202) {
-                    var contentElement = document.getElementById('card');
+                    var contentElement = document.getElementById('card' + idAdvert);
                     contentElement.innerHTML = xhr.responseText;
                     console.log('Request sent successfully');
                 } else {

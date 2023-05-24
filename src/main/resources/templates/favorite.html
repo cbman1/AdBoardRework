@@ -68,7 +68,7 @@
     </header>
 
     <div class="cards" id="cards">
-        <div class="card" style="width: 18rem;" th:each="advert : ${favorites}" id="card">
+        <div class="card" style="width: 18rem;" th:each="advert : ${favorites}" th:id="card + ${advert.id}">
             <th:block th:if="${advert.getImages().size() > 0}">
                 <img th:src="@{${'/images/uploads/advert/' + advert.getImages().get(0)}}" class="card-img" alt="...">
             </th:block>
@@ -76,16 +76,13 @@
                 <img th:src="@{'/images/uploads/advert/default.png'}" class="card-img" alt="...">
             </th:block>
 
-            <div class="card-body">
-                <input type="hidden" id="idAdvert" th:value="${advert.id}">
+            <div class="card-body" id="card-body">
                 <h4 class="card-title" th:text="*{advert.name}"></h4>
                 <p class="card-text" th:text="*{advert.description}"></p>
                 <h5 class="card-price" th:text="'Price: ' +  *{advert.price}"></h5>
                 <a th:href="@{/advert(id=${advert.id})}" class="btn btn-primary">Open</a>
-                <button class="btn btn-danger" onclick="removeFavorite()">Remove</button>
+                <button class="btn btn-danger" th:onclick="|removeFavorite(${advert.id})|">Remove</button>
             </div>
-            <!--                <button class="btn-danger btn" onclick="removeFavorite(1)">Remove</button>-->
-<!--                <a th:href="@{/advert/remove/favorite(id=${advert.id})}" class="btn btn-danger">Remove</a>-->
 
             </div>
         </div>

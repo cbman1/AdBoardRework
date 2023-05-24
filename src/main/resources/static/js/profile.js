@@ -10,14 +10,14 @@ reviewsButton.addEventListener('click', function() {
     }
 });
 
-// let chatButton = document.getElementById('chatButton');
-// chatButton.addEventListener('click', function() {
-//     if (id) {
-//         window.location.href = '/chats/new/' + id;
-//     } else {
-//         alert('Параметр "id" не найден');
-//     }
-// });
+let chatButton = document.getElementById('chatButton');
+chatButton.addEventListener('click', function() {
+    if (id) {
+        window.location.href = '/chats/new/' + id;
+    } else {
+        alert('Параметр "id" не найден');
+    }
+});
 
 function toggleButton(isActive) {
     var csrfToken = getCsrfToken()

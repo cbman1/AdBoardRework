@@ -1,0 +1,40 @@
+version: '3.3'
+
+services:
+  database:
+    image:
+      postgres:15.3
+    container_name: database
+    ports:
+      - 5431:5432
+    networks:
+      - cloud
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=qwerty009
+      - POSTGRES_DB=adboard_db
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+  application:
+    image:
+      adboard-app
+    container_name: application_1
+    environment:
+      - "SPRING_DATASOURCE_USERNAME=postgres"
+      - "SPRING_DATASOURCE_PASSWORD=qwerty009"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/adboard_db"
+    networks:
+      - cloud
+    ports:
+      - 80:8080
+    depends_on:
+      - database
+
+
+volumes:
+  postgres_volume:
+    external: true
+
+networks:
+  cloud:
+    external: true

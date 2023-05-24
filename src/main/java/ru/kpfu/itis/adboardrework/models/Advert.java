@@ -28,7 +28,7 @@ public class Advert {
     private String name;
     private String description;
     private Integer price;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
     private User authorId;
     private String category;
