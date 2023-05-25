@@ -2,6 +2,7 @@ package ru.kpfu.itis.adboardrework.dto.advert;
 
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,7 @@ public class AdvertDto {
     private String description;
 
     @PositiveOrZero(message = "Price >= 0")
+    @NotNull(message = "Field price is required")
     private Integer price;
     @NotBlank(message = "Category is required")
     private String category;

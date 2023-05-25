@@ -17,6 +17,6 @@ public interface UserService {
     User getUserById(Long id);
     List<Advert> favoriteThisUser(Principal principal);
     void updateUser(String email, UpdateUserDto userDto);
-    void deleteUser(String email);
+    void deleteUser(Principal principal);
     void setUserAvatar(Principal principal, String avatarPath);
 }

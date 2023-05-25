@@ -3,6 +3,7 @@ package ru.kpfu.itis.adboardrework.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.adboardrework.dto.NewReviewDto;
+import ru.kpfu.itis.adboardrework.exceptions.NotFoundException;
 import ru.kpfu.itis.adboardrework.models.Advert;
 import ru.kpfu.itis.adboardrework.models.Reviews;
 import ru.kpfu.itis.adboardrework.models.User;
@@ -26,10 +27,9 @@ public class ReviewsServiceImpl implements ReviewsService {
     @Override
     public void addReview(NewReviewDto reviewDto, Long idRecipient, Principal principal) {
 
-        //TODO: норм ошибки
-        User recipient = userRepository.findById(idRecipient).orElseThrow();
-        User thisUser = userRepository.findByEmail(principal.getName()).orElseThrow();
-        Advert advertReview = advertRepository.findByNameAndAuthorId(reviewDto.getAdvertName(), recipient).orElseThrow();
+        User recipient = userRepository.findById(idRecipient).orElseThrow(() -> new NotFoundException("not found"));
+        User thisUser = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new NotFoundException("not found"));
+        Advert advertReview = advertRepository.findByNameAndAuthorId(reviewDto.getAdvertName(), recipient).orElseThrow(() -> new NotFoundException("not found"));
 
         Reviews reviews = reviewsRepository.save(
                 Reviews.builder()
@@ -44,7 +44,7 @@ public class ReviewsServiceImpl implements ReviewsService {
 
     @Override
     public List<Reviews> getReviewsUser(Long idRecipient) {
-        return reviewsRepository.findByRecipientId(userRepository.findById(idRecipient).orElseThrow());
+        return reviewsRepository.findByRecipientId(userRepository.findById(idRecipient).orElseThrow(() -> new NotFoundException("not found")));
     }
 
     @Override

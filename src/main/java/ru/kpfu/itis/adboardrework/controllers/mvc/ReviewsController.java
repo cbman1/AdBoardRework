@@ -1,9 +1,11 @@
 package ru.kpfu.itis.adboardrework.controllers.mvc;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,8 +26,9 @@ public class ReviewsController {
     private final UserService userService;
     @GetMapping("/profile/reviews")
     public String reviews(@RequestParam("id") Long id, Model model, Principal principal) {
-        model.addAttribute("emailReviews", userService.getUserById(id).getEmail());
+        model.addAttribute("errors", null);
 
+        model.addAttribute("user", userService.getUserById(id));
         model.addAttribute("advertsUser", advertService.getAllAdvertsDtoByUser(id));
         model.addAttribute("reviews", reviewsService.getReviewsUser(id));
         model.addAttribute("newReviewDto", new NewReviewDto());
@@ -33,11 +36,19 @@ public class ReviewsController {
     }
 
     @PostMapping("/profile/reviews")
-    public String addReview(@ModelAttribute(value = "newReviewDto") NewReviewDto reviewDto, @RequestParam("id") Long id, Principal principal, Model model) {
+    public String addReview(@Valid @ModelAttribute(value = "newReviewDto") NewReviewDto reviewDto, @RequestParam("id") Long id, Principal principal, Model model
+    ,BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
+            return "profile-edit";
+        }
+
         if (principal == null) {
             model.addAttribute("errorMessage", "You must be logged in");
             return "error";
         }
+
         reviewsService.addReview(reviewDto, id, principal);
         return "redirect:/profile/reviews?id=" + id;
     }

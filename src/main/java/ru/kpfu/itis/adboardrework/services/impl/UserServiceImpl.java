@@ -13,6 +13,7 @@ import ru.kpfu.itis.adboardrework.converters.UserMapper;
 import ru.kpfu.itis.adboardrework.dto.user.NewUserDto;
 import ru.kpfu.itis.adboardrework.dto.user.UpdateUserDto;
 import ru.kpfu.itis.adboardrework.dto.user.UserDto;
+import ru.kpfu.itis.adboardrework.exceptions.NotFoundException;
 import ru.kpfu.itis.adboardrework.models.Advert;
 import ru.kpfu.itis.adboardrework.models.Authority;
 import ru.kpfu.itis.adboardrework.models.State;
@@ -66,22 +67,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserDtoByEmail(String email) {
-        return userMapper.toDto(userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("not found")));
+        return userMapper.toDto(userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("not found")));
     }
 
     @Override
     public UserDto getUserDtoById(Long id) {
-        return userMapper.toDto(userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("not found")));
+        return userMapper.toDto(userRepository.findById(id).orElseThrow(() -> new NotFoundException("not found")));
     }
 
     @Override
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("not found"));
+        return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("not found"));
     }
 
     @Override
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("not found"));
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("not found"));
     }
 
     @Override
@@ -110,35 +111,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void setUserAvatar(Principal principal, String avatarPath) {
-        User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new UsernameNotFoundException("not found"));
+        User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new NotFoundException("not found"));
         user.setAvatarPath(avatarPath);
         userRepository.save(user);
     }
 
     @Override
-    public void deleteUser(String email) {
+    public void deleteUser(Principal principal) {
+        User user = getUserByEmail(principal.getName());
 
-    }
+        user.setState(State.DELETED);
 
-    public static void updateAuthentication(User user) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getPrincipal() instanceof UserDetailsImpl principal) {
-            if (principal.getUsername().equals(user.getEmail())) {
-                UserDetailsImpl updatedPrincipal = new UserDetailsImpl(
-                        User.builder().
-                                id(user.getId())
-                                .firstName(user.getFirstName())
-                                .lastName(user.getLastName())
-                                .email(user.getEmail())
-                                .hashPassword(user.getHashPassword())
-                                .phoneNumber(user.getPhoneNumber())
-                                .authority(user.getAuthority())
-                                .state(user.getState())
-                                .build()
-                );
-                Authentication newAuth = new UsernamePasswordAuthenticationToken(updatedPrincipal, auth.getCredentials(), updatedPrincipal.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(newAuth);
-            }
-        }
+        userRepository.save(user);
+
     }
 }

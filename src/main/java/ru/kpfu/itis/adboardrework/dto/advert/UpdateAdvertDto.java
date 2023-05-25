@@ -1,6 +1,7 @@
 package ru.kpfu.itis.adboardrework.dto.advert;
 
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

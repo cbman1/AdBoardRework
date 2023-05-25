@@ -118,14 +118,14 @@
         <span>No reviews yet</span>
     </div>
 
-    <div class="review-form" sec:authorize="isAuthenticated()" th:if="${#authentication.name != emailReviews}">
-        <form action="/profile/reviews?id=" th:action="@{/profile/reviews}" id="review-form" method="post" th:object="${newReviewDto}">
-            <script th:inline="javascript">
-                var form = document.getElementById('review-form');
-                const params = new URLSearchParams(document.location.search);
-                const id = params.get('id');
-                form.action = '/profile/reviews?id=' + id;
-            </script>
+    <div class="review-form" sec:authorize="isAuthenticated()" th:if="${#authentication.name != user.email}">
+        <form th:action="@{/profile/reviews(id=${user.id})}" id="review-form" method="post" th:object="${newReviewDto}">
+<!--            <script th:inline="javascript">-->
+<!--                var form = document.getElementById('review-form');-->
+<!--                const params = new URLSearchParams(document.location.search);-->
+<!--                const id = params.get('id');-->
+<!--                form.action = '/profile/reviews?id=' + id;-->
+<!--            </script>-->
 
             <h2>Оставьте отзыв</h2>
 
@@ -150,6 +150,12 @@
                 <select required id="advert" name="advert" th:field="*{advertName}">
                     <option th:each="advert : ${advertsUser}" th:value="${advert.name}" th:text="${advert.name}"></option>
                 </select>
+            </div>
+
+            <div th:if="${errors != null}">
+                <div th:each="error : ${errors}">
+                    <span th:text="${error.defaultMessage}"></span>
+                </div>
             </div>
 
             <div class="form-group form-button">
