@@ -36,12 +36,14 @@ public class ReviewsController {
     }
 
     @PostMapping("/profile/reviews")
-    public String addReview(@Valid @ModelAttribute(value = "newReviewDto") NewReviewDto reviewDto, @RequestParam("id") Long id, Principal principal, Model model
-    ,BindingResult bindingResult) {
+    public String addReview(@Valid @ModelAttribute(value = "newReviewDto") NewReviewDto reviewDto, BindingResult bindingResult, @RequestParam("id") Long id, Principal principal, Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
-            return "profile-edit";
+            model.addAttribute("reviews", reviewsService.getReviewsUser(id));
+            model.addAttribute("user", userService.getUserById(id));
+            model.addAttribute("advertsUser", advertService.getAllAdvertsDtoByUser(id));
+            return "reviews";
         }
 
         if (principal == null) {

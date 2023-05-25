@@ -28,7 +28,7 @@ public class AdvertServiceImpl implements AdvertService {
 
 
     @Override
-    public void addAdvert(AdvertDto advertDto, Principal principal) {
+    public Advert addAdvert(AdvertDto advertDto, Principal principal) {
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         String nowDate = simpleDateFormat.format(date);
@@ -44,6 +44,7 @@ public class AdvertServiceImpl implements AdvertService {
                 .salesStartDate(nowDate)
                 .images(advertDto.getImages())
                 .state(State.ACTIVE).build());
+        return newAdvert;
     }
 
     @Override

@@ -8,7 +8,7 @@ import java.security.Principal;
 import java.util.List;
 
 public interface AdvertService {
-    void addAdvert(AdvertDto advertDto, Principal principal);
+    Advert addAdvert(AdvertDto advertDto, Principal principal);
     AdvertDto getAdvertDtoById(Long id);
     Advert getAdvertById(Long id);
     Long getIdLastAdvert(Principal principal);

@@ -9,9 +9,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 import ru.kpfu.itis.adboardrework.dto.advert.AdvertDto;
 import ru.kpfu.itis.adboardrework.dto.advert.UpdateAdvertDto;
 import ru.kpfu.itis.adboardrework.dto.user.UpdateUserDto;
+import ru.kpfu.itis.adboardrework.models.Advert;
 import ru.kpfu.itis.adboardrework.services.AdvertService;
 import ru.kpfu.itis.adboardrework.services.UserService;
 
@@ -59,8 +63,8 @@ public class AdvertController {
     }
 
     @PostMapping("/advert/add")
-    public String addAdvert(@Valid @ModelAttribute(value = "advertDto") AdvertDto advertDto, Principal principal, @RequestParam("photos") MultipartFile[] photos, Model model,
-                            BindingResult bindingResult) throws IOException {
+    public String addAdvert(@Valid @ModelAttribute(value = "advertDto") AdvertDto advertDto, BindingResult bindingResult, Principal principal, @RequestParam("photos") MultipartFile[] photos,
+                            Model model) throws IOException {
 
         if (principal == null) {
             model.addAttribute("errorMessage", "You must be logged in");
@@ -74,8 +78,8 @@ public class AdvertController {
 
         advertDto.setImages(setImages(photos));
 
-        advertService.addAdvert(advertDto, principal);
-        return "redirect:/advert?id=" + advertService.getIdLastAdvert(principal);
+        Advert advert = advertService.addAdvert(advertDto, principal);
+        return "redirect:/advert?id=" + advert.getId();
     }
 
     @GetMapping("/advert/edit")
@@ -87,18 +91,21 @@ public class AdvertController {
             model.addAttribute("errorMessage", "You are not author of this advert");
             return "error";
         }
+
         model.addAttribute("advert", advertService.getAdvertById(id));
         model.addAttribute("updateAdvertDto", new UpdateAdvertDto());
         return "edit-advert";
     }
 
     @PostMapping("/advert/edit")
-    public String updateAdvert(@Valid @ModelAttribute("updateAdvertDto") UpdateAdvertDto updateAdvertDto,
-                               Principal principal, @RequestParam(value = "files", required = false) MultipartFile[] files,
-                               @RequestParam("id") Long id, Model model, BindingResult bindingResult) throws IOException {
+    public String updateAdvert(@Valid @ModelAttribute("updateAdvertDto") UpdateAdvertDto updateAdvertDto, BindingResult bindingResult,
+                                     Principal principal, @RequestParam(value = "files", required = false) MultipartFile[] files,
+                                     @RequestParam("id") Long id, Model model) throws IOException {
+
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
+            model.addAttribute("advert", advertService.getAdvertById(id));
             return "edit-advert";
         }
 
@@ -106,8 +113,9 @@ public class AdvertController {
             model.addAttribute("errorMessage", "You are not author of this advert");
             return "error";
         }
+
         updateAdvertDto.setImages(setImages(files));
-        advertService.updateAdvert(id , updateAdvertDto);
+        advertService.updateAdvert(id, updateAdvertDto);
         return "redirect:/advert?id=" + id;
     }
 

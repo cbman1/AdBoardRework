@@ -97,8 +97,8 @@ public class UserController {
     }
 
     @PostMapping("/profile/edit")
-    public String updateProfile(@Valid @ModelAttribute("updateUserDto") UpdateUserDto updateUserDto, Principal principal, @RequestParam(value = "avatar", required = false) MultipartFile avatar
-    ,BindingResult bindingResult, Model model) throws IOException {
+    public String updateProfile(@Valid @ModelAttribute("updateUserDto") UpdateUserDto updateUserDto, BindingResult bindingResult, Principal principal, @RequestParam(value = "avatar", required = false) MultipartFile avatar
+    , Model model) throws IOException {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
